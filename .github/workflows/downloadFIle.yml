@@ -3,7 +3,7 @@ name: obtain the doc
 on:
   schedule:
     - cron:  '*/1 * * * *'
-  workflow_dispatch:
+
 
 jobs:
   download_and_share_file:
