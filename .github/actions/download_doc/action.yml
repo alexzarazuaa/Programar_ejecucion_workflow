@@ -1,0 +1,10 @@
+name: "get files from a url"
+description: "download files and push in web"
+
+outputs:
+  message:
+    description: "Message"
+
+runs:
+  using: "node12"
+  main: "dist/index.js"

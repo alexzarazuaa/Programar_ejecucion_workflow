@@ -1,0 +1,29 @@
+name: obtain the doc
+
+on:
+  schedule:
+     - cron: "*/5 * * * *"
+
+jobs:
+  download_and_share_file:
+    name: download_and_share_file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: obtain and insert in index
+        uses: ./.github/actions/download_doc
+      - name: Push the changes
+        run: |
+          git config user.name alexzarazuaa
+          git config user.email alexzarazua88@gmail.com
+          git add .
+          git commit -m "upload files"
+          git push origin master
+      - name: Surge Deploy
+        uses: dswistowski/surge-sh-action@v1
+        with:
+          domain: "alejandrozara.surge.sh"
+          project: "."
+          login: ${{ secrets.E_LOGINSURGE }}
+          token: ${{ secrets.TOKEN_SURGE }}
