@@ -1,39 +1,43 @@
+//Requeriments
 const download = require("download");
 const core = require("@actions/core");
 const fs = require("fs");
-//THE URL
-let doc_url = "https://www.mscbs.gob.es/profesionales/saludPublica/ccayes/alertasActual/nCov/vacunaCovid19.htm";
+var filePath = "./index.html";
+
+
+//the url for download in file
 //The sufix for the new file
-let sufijo = ".ods";
+let info_doc =[
+  "https://www.mscbs.gob.es/profesionales/saludPublica/ccayes/alertasActual/nCov/vacunaCovid19.htm_",
+  ".ods"
+]
+let info_docUrl=  info_doc[0];
+let info_docSuffix = info_doc[1]
 
-// variables date
-const fecha = new Date();
-const year = fecha.getFullYear();
-const dia = `${date.getDate()}`.padStart(2, "0");
-const mes = `${date.getMonth() + 1}`.padStart(2, "0");
+const date = new Date();
+const year = date.getFullYear();
+const dia = date.getDay();
+const mes = date.getMonth();
+
+console.log(year,dia,mes)
+
+const fileUrl = `${info_docUrl}${dia}${mes}${year}${info_docSuffix}`;
+
+const downloadfileName = `${dia}${mes}${year}${info_docSuffix}`;
+
+download(fileUrl, "./files/", { downloadfileName });
+
+console.log(filePath,fileUrl,downloadfileName)
 
 
-
-// final url doc
-const url = `${doc_url}${year}${mes}${dia}${sufijo}`;
-
-// final name doc
-const docFileName = `${year}${mes}${dia}.ods`;
-
-
-//function for download the file and upload in ./
-download(url, "./", { docFileName });
-
-//paht file
-var filePath = "./view/index.html";
 
 try {
   fs.readFile(filePath, "utf8", function (err, data) {
-    var info = data.replace(
+    var result = data.replace(
       /href=.* download/,
-      'href="./' + docFileName + '"  download'
+      'href="./files/' + downloadfileName + '"  download'
     );
-    fs.writeFile(filePath, info, "utf8", function (err) {
+    fs.writeFile(filePath, result, "utf8", function (err) {
       if (err) return console.log(err);
     });
   });
@@ -41,5 +45,5 @@ try {
   console.log(error.message);
 }
 
-core.setOutput("Response Okey", "Archivo Modificado");
-console.log("Response Okey", "Archivo Modificado");
+core.setOutput(" Okey", "Archivo Modificado");
+console.log(" Okey", "Archivo Modificado");
